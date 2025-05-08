@@ -1,6 +1,6 @@
-import React from 'react'
-import Navbar from '../component/Navbar'
-import { motion } from 'framer-motion'
+import React, { useState, useEffect } from 'react';
+import Navbar from '../component/Navbar';
+import { motion } from 'framer-motion';
 
 // Carousel data
 const testimonials = [
@@ -22,37 +22,48 @@ const testimonials = [
         author: "David Wilson",
         role: "First-time Buyer"
     }
-]
+];
 
 function Main() {
-    const [currentSlide, setCurrentSlide] = React.useState(0)
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [isMobile, setIsMobile] = useState(false);
 
     const nextSlide = () => {
-        setCurrentSlide((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1))
-    }
+        setCurrentSlide((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+    };
 
     const prevSlide = () => {
-        setCurrentSlide((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1))
-    }
+        setCurrentSlide((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
+    };
 
     // Auto-rotate slides every 5 seconds
-    React.useEffect(() => {
-        const interval = setInterval(nextSlide, 5000)
-        return () => clearInterval(interval)
-    }, [])
+    useEffect(() => {
+        const interval = setInterval(nextSlide, 5000);
+        return () => clearInterval(interval);
+    }, []);
+
+    // Check for mobile view
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     return (
-
         <div className='w-full min-h-screen bg-gradient-to-br from-blue-300 via-cyan-300 to-yellow-400 flex flex-col items-center overflow-hidden'>
-            {/* Fancy Navbar */}
+            {/* Navbar - will be at bottom on mobile */}
             <Navbar />
 
-            {/* Hero Section */}
+            {/* Hero Section with conditional spacing */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.8 }}
-                className="flex-1 flex flex-col items-center justify-center px-4 text-center max-w-4xl mt-32"
+                className={`flex-1 w-full flex flex-col items-center justify-center px-4 text-center max-w-4xl ${isMobile ? 'pt-16 pb-32' : 'mt-32'
+                    }`}
             >
                 <motion.h1
                     className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"
@@ -99,7 +110,8 @@ function Main() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.2, duration: 0.8 }}
-                className="w-full max-w-4xl px-4 mb-16"
+                className={`w-full max-w-4xl px-4 ${isMobile ? 'mb-24' : 'mb-16'
+                    }`}
             >
                 <div className="relative overflow-hidden mt-4 rounded-2xl bg-white/20 backdrop-blur-md p-8 shadow-lg border border-white/30">
                     <div className="relative h-64">
@@ -152,7 +164,8 @@ function Main() {
                             <button
                                 key={index}
                                 onClick={() => setCurrentSlide(index)}
-                                className={`w-3 h-3 rounded-full transition-all ${index === currentSlide ? 'bg-white w-6' : 'bg-white/30'}`}
+                                className={`w-3 h-3 rounded-full transition-all ${index === currentSlide ? 'bg-white w-6' : 'bg-white/30'
+                                    }`}
                             />
                         ))}
                     </div>
@@ -185,7 +198,7 @@ function Main() {
                 }}
             />
         </div>
-    )
+    );
 }
 
-export default Main
+export default Main;

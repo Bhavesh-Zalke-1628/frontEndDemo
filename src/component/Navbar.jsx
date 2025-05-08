@@ -36,7 +36,7 @@ const Loader = ({ setLoading }) => {
                 }
                 return prev + (10 + Math.random() * 5);
             });
-        }, 100);
+        }, 300);
 
         return () => clearInterval(timer);
     }, [setLoading]);
