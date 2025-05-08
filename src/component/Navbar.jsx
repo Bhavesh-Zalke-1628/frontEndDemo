@@ -98,7 +98,7 @@ const Loader = ({ setLoading }) => {
                 className="absolute bottom-10 text-purple-200 text-xs"
                 variants={itemVariants}
             >
-                Powered by Purple & Pink
+                Powered Hously pvt.ltd.
             </motion.div>
         </motion.div>
     );

@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const ProcessOfWork = () => {
     const [hoveredStep, setHoveredStep] = useState(null);
     const [selectedStep, setSelectedStep] = useState(null);
+    const [scrollProgress, setScrollProgress] = useState(0);
+    const scrollContainerRef = useRef(null);
 
     const steps = [
         {
@@ -58,6 +60,22 @@ const ProcessOfWork = () => {
 
     const currentStep = hoveredStep || selectedStep;
 
+    // Calculate scroll progress for mobile
+    useEffect(() => {
+        const container = scrollContainerRef.current;
+        if (!container) return;
+
+        const handleScroll = () => {
+            const scrollWidth = container.scrollWidth - container.clientWidth;
+            const currentScroll = container.scrollLeft;
+            const progress = scrollWidth > 0 ? (currentScroll / scrollWidth) * 100 : 0;
+            setScrollProgress(progress);
+        };
+
+        container.addEventListener('scroll', handleScroll);
+        return () => container.removeEventListener('scroll', handleScroll);
+    }, []);
+
     return (
         <div className="py-12 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
             <div className="max-w-7xl mx-auto">
@@ -81,7 +99,22 @@ const ProcessOfWork = () => {
 
                 {/* Mobile View - Horizontal Scroll */}
                 <div className="md:hidden mb-8">
-                    <div className="overflow-x-auto pb-6 -mx-4 px-4">
+                    {/* Scroll progress bar */}
+                    <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4">
+                        <motion.div
+                            className="bg-blue-600 h-1.5 rounded-full"
+                            style={{ width: `${scrollProgress}%` }}
+                            initial={{ width: 0 }}
+                            animate={{ width: `${scrollProgress}%` }}
+                            transition={{ duration: 0.3 }}
+                        />
+                    </div>
+
+                    <div
+                        ref={scrollContainerRef}
+                        className="overflow-x-auto pb-6 -mx-4 px-4 scrollbar-hide"
+                        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                    >
                         <div className="flex space-x-6 w-max">
                             {steps.map((step, index) => (
                                 <motion.div
