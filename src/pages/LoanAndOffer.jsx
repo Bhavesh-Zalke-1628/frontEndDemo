@@ -62,62 +62,80 @@ const LoanAndOffer = () => {
     ];
 
     return (
-        <div className="bg-white dark:bg-gray-900 text-black dark:text-white">
-            {/* Content */}
-
-            <div className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
-                <div className="max-w-7xl mx-auto">
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="text-3xl font-bold text-center text-gray-900 mb-2"
-                    >
+        <section className="bg-white dark:bg-gray-900 py-16 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+                {/* Section Header */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="text-center mb-12"
+                >
+                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
                         Loan & Offer Options
-                    </motion.h2>
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        className="text-lg text-center text-gray-600 mb-12"
-                    >
+                    </h2>
+                    <p className="text-lg text-gray-600 dark:text-gray-300">
                         Explore our competitive loan products tailored for your needs
-                    </motion.p>
+                    </p>
+                </motion.div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Mobile Horizontal Scroll (shows on screens < 1024px) */}
+                <div className="lg:hidden overflow-x-auto pb-6 -mx-4 px-4">
+                    <div className="flex space-x-6 w-max min-h-[400px]">
                         {loanOffers.map((offer) => (
                             <motion.div
                                 key={offer.id}
-                                className={`${offer.bgColor} rounded-xl overflow-hidden shadow-sm border border-gray-100`}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
+                                className={`${offer.bgColor} dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700 w-72 flex-shrink-0 flex flex-col`}
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.5 }}
-                                whileHover={{ y: -3, shadow: "lg" }}
+                                whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
                             >
                                 {/* Gradient header */}
                                 <div className={`h-2 bg-gradient-to-r ${offer.color}`}></div>
 
+                                {/* Card content */}
                                 <div className="p-6 flex flex-col h-full">
                                     <div className="flex-1">
-                                        <h3 className="text-xl font-semibold text-gray-800 mb-3">{offer.title}</h3>
+                                        <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-3">
+                                            {offer.title}
+                                        </h3>
                                         <div className="mb-5">
-                                            <p className="text-xs uppercase tracking-wider text-gray-500">Interest Rate</p>
-                                            <p className="text-2xl font-bold text-gray-900 mt-1">{offer.rate}</p>
+                                            <p className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                                                Interest Rate
+                                            </p>
+                                            <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                                                {offer.rate}
+                                            </p>
                                         </div>
                                         <ul className="space-y-3 mb-6">
                                             {offer.features.map((feature, i) => (
                                                 <li key={i} className="flex items-start">
-                                                    <div className={`p-1 rounded-full mr-3 bg-white`}>
-                                                        <svg className={`h-4 w-4 ${offer.iconColor}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    <div className={`p-1 rounded-full mr-3 bg-white dark:bg-gray-700`}>
+                                                        <svg
+                                                            className={`h-4 w-4 ${offer.iconColor} dark:text-white`}
+                                                            fill="none"
+                                                            viewBox="0 0 24 24"
+                                                            stroke="currentColor"
+                                                        >
+                                                            <path
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                                strokeWidth={2}
+                                                                d="M5 13l4 4L19 7"
+                                                            />
                                                         </svg>
                                                     </div>
-                                                    <span className="text-sm text-gray-700">{feature}</span>
+                                                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                                                        {feature}
+                                                    </span>
                                                 </li>
                                             ))}
                                         </ul>
                                     </div>
-                                    <button className={`w-full py-2.5 px-5 rounded-md font-medium text-sm transition-all duration-300 bg-gradient-to-r ${offer.color} text-white hover:opacity-90`}>
+                                    <button
+                                        className={`w-full py-2.5 px-5 rounded-md font-medium text-sm transition-all duration-300 bg-gradient-to-r ${offer.color} text-white hover:opacity-90`}
+                                    >
                                         Apply Now
                                     </button>
                                 </div>
@@ -125,22 +143,72 @@ const LoanAndOffer = () => {
                         ))}
                     </div>
                 </div>
-            </div>
-        </div>
 
+                {/* Desktop Grid (shows on screens ≥ 1024px) */}
+                <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {loanOffers.map((offer) => (
+                        <motion.div
+                            key={offer.id}
+                            className={`${offer.bgColor} dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col`}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                            whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
+                        >
+                            {/* Gradient header */}
+                            <div className={`h-2 bg-gradient-to-r ${offer.color}`}></div>
+
+                            {/* Card content */}
+                            <div className="p-6 flex flex-col h-full">
+                                <div className="flex-1">
+                                    <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-3">
+                                        {offer.title}
+                                    </h3>
+                                    <div className="mb-5">
+                                        <p className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                                            Interest Rate
+                                        </p>
+                                        <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                                            {offer.rate}
+                                        </p>
+                                    </div>
+                                    <ul className="space-y-3 mb-6">
+                                        {offer.features.map((feature, i) => (
+                                            <li key={i} className="flex items-start">
+                                                <div className={`p-1 rounded-full mr-3 bg-white dark:bg-gray-700`}>
+                                                    <svg
+                                                        className={`h-4 w-4 ${offer.iconColor} dark:text-white`}
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke="currentColor"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth={2}
+                                                            d="M5 13l4 4L19 7"
+                                                        />
+                                                    </svg>
+                                                </div>
+                                                <span className="text-sm text-gray-700 dark:text-gray-300">
+                                                    {feature}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                <button
+                                    className={`w-full py-2.5 px-5 rounded-md font-medium text-sm transition-all duration-300 bg-gradient-to-r ${offer.color} text-white hover:opacity-90`}
+                                >
+                                    Apply Now
+                                </button>
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
+            </div>
+        </section>
     );
 };
-
-// Add these to your tailwind.config.js if needed
-// theme: {
-//   extend: {
-//     colors: {
-//       'blue-25': '#f5f9ff',
-//       'gray-25': '#fcfcfc',
-//       'green-25': '#f5fffa',
-//       'indigo-25': '#f5f7ff'
-//     }
-//   }
-// }
 
 export default LoanAndOffer;

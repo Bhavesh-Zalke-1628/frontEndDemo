@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 
 const ProcessOfWork = () => {
     const [hoveredStep, setHoveredStep] = useState(null);
+    const [selectedStep, setSelectedStep] = useState(null);
 
     const steps = [
         {
@@ -55,16 +56,16 @@ const ProcessOfWork = () => {
         }
     ];
 
-    const currentStep = steps.find(step => step.id === hoveredStep);
+    const currentStep = hoveredStep || selectedStep;
 
     return (
-        <div className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="py-12 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
             <div className="max-w-7xl mx-auto">
-                <div className="text-center mb-20">
+                <div className="text-center mb-12 md:mb-20">
                     <motion.h2
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
+                        className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 md:mb-4"
                     >
                         Our Work Process
                     </motion.h2>
@@ -72,24 +73,52 @@ const ProcessOfWork = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.2 }}
-                        className="text-xl text-gray-600 max-w-3xl mx-auto"
+                        className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto"
                     >
                         A transparent approach to achieving your financial objectives
                     </motion.p>
                 </div>
 
-                <div className="relative">
-                    {/* Progress line */}
-                    <div className="hidden md:block absolute left-0 right-0 top-1/2 h-1 bg-gray-200 -translate-y-1/2"></div>
+                {/* Mobile View - Horizontal Scroll */}
+                <div className="md:hidden mb-8">
+                    <div className="overflow-x-auto pb-6 -mx-4 px-4">
+                        <div className="flex space-x-6 w-max">
+                            {steps.map((step, index) => (
+                                <motion.div
+                                    key={step.id}
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: index * 0.1 }}
+                                    className={`w-64 flex-shrink-0 bg-white p-6 rounded-xl shadow-md border border-gray-100 text-center ${selectedStep === step.id ? 'border-blue-500' : ''}`}
+                                    onClick={() => setSelectedStep(selectedStep === step.id ? null : step.id)}
+                                >
+                                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-white border-2 border-blue-500 flex items-center justify-center text-blue-500 font-bold shadow-sm">
+                                        {index + 1}
+                                    </div>
+                                    <div className={`w-16 h-16 mx-auto mb-4 rounded-full ${step.color} flex items-center justify-center`}>
+                                        {step.icon}
+                                    </div>
+                                    <h3 className="text-lg font-bold text-gray-800 mb-2">{step.title}</h3>
+                                    <p className="text-sm text-gray-600">{step.shortDescription}</p>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-4">
+                {/* Desktop View */}
+                <div className="hidden md:block relative">
+                    {/* Progress line */}
+                    <div className="absolute left-0 right-0 top-1/2 h-1 bg-gray-200 -translate-y-1/2"></div>
+
+                    <div className="grid grid-cols-4 gap-4 relative z-10">
                         {steps.map((step, index) => (
                             <motion.div
                                 key={step.id}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1 }}
-                                className="relative z-10"
+                                className="relative"
                                 onMouseEnter={() => setHoveredStep(step.id)}
                                 onMouseLeave={() => setHoveredStep(null)}
                             >
@@ -107,9 +136,9 @@ const ProcessOfWork = () => {
                                     <p className="text-gray-600">{step.shortDescription}</p>
                                 </div>
 
-                                {/* Arrow connector (desktop) */}
+                                {/* Arrow connector */}
                                 {index !== steps.length - 1 && (
-                                    <div className="hidden md:block absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2">
+                                    <div className="absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2">
                                         <svg className="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
                                         </svg>
@@ -120,16 +149,20 @@ const ProcessOfWork = () => {
                     </div>
                 </div>
 
-                {/* Long description below the grid */}
+                {/* Description Panel */}
                 {currentStep && (
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="mt-12 bg-gray-50 border border-gray-200 rounded-lg p-6 max-w-4xl mx-auto shadow-sm"
+                        className="mt-8 md:mt-12 bg-gray-50 border border-gray-200 rounded-lg p-6 max-w-4xl mx-auto shadow-sm"
                     >
-                        <h4 className="text-xl font-semibold text-gray-800 mb-2">{currentStep.title}</h4>
-                        <p className="text-gray-700 text-base">{currentStep.longDescription}</p>
+                        <h4 className="text-lg md:text-xl font-semibold text-gray-800 mb-2">
+                            {steps.find(step => step.id === currentStep).title}
+                        </h4>
+                        <p className="text-gray-700 text-sm md:text-base">
+                            {steps.find(step => step.id === currentStep).longDescription}
+                        </p>
                     </motion.div>
                 )}
 
@@ -137,9 +170,9 @@ const ProcessOfWork = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.8 }}
-                    className="mt-20 text-center"
+                    className="mt-12 md:mt-20 text-center"
                 >
-                    <button className="px-8 py-4 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl text-lg">
+                    <button className="px-6 py-3 md:px-8 md:py-4 bg-blue-600 text-white rounded-lg md:rounded-xl font-medium hover:bg-blue-700 transition-all duration-300 shadow-md hover:shadow-lg text-base md:text-lg">
                         Begin Your Financial Journey
                     </button>
                 </motion.div>
