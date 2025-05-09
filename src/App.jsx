@@ -6,6 +6,7 @@ import LoanAndOffer from './pages/LoanAndOffer'
 import Calculator from './pages/Caluclator'
 import ProcessOfWork from './pages/ProcessOfWork'
 import MapAndLocation from './pages/MapAndLocation'
+import Footer from './pages/Footer'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -18,6 +19,7 @@ function App() {
       <Calculator />
       <ProcessOfWork />
       <MapAndLocation />
+      <Footer/>
     </>
   )
 }
