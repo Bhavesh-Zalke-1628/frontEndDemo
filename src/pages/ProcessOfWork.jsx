@@ -125,9 +125,7 @@ const ProcessOfWork = () => {
                                     className={`w-64 flex-shrink-0 bg-white p-6 rounded-xl shadow-md border border-gray-100 text-center ${selectedStep === step.id ? 'border-blue-500' : ''}`}
                                     onClick={() => setSelectedStep(selectedStep === step.id ? null : step.id)}
                                 >
-                                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-white border-2 border-blue-500 flex items-center justify-center text-blue-500 font-bold shadow-sm">
-                                        {index + 1}
-                                    </div>
+
                                     <div className={`w-16 h-16 mx-auto mb-4 rounded-full ${step.color} flex items-center justify-center`}>
                                         {step.icon}
                                     </div>

@@ -79,6 +79,69 @@ const LoanAndOffer = () => {
                     </p>
                 </motion.div>
 
+                {/* Desktop Grid (shows on screens ≥ 1024px) */}
+                <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {loanOffers.map((offer) => (
+                        <motion.div
+                            key={offer.id}
+                            className={`${offer.bgColor} dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col`}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                            whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
+                        >
+                            {/* Gradient header */}
+                            <div className={`h-2 bg-gradient-to-r ${offer.color}`}></div>
+
+                            {/* Card content */}
+                            <div className="p-6 flex flex-col h-full">
+                                <div className="flex-1">
+                                    <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-3">
+                                        {offer.title}
+                                    </h3>
+                                    <div className="mb-5">
+                                        <p className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                                            Interest Rate
+                                        </p>
+                                        <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                                            {offer.rate}
+                                        </p>
+                                    </div>
+                                    <ul className="space-y-3 mb-6">
+                                        {offer.features.map((feature, i) => (
+                                            <li key={i} className="flex items-start">
+                                                <div className={`p-1 rounded-full mr-3 bg-white dark:bg-gray-700`}>
+                                                    <svg
+                                                        className={`h-4 w-4 ${offer.iconColor} dark:text-white`}
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke="currentColor"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth={2}
+                                                            d="M5 13l4 4L19 7"
+                                                        />
+                                                    </svg>
+                                                </div>
+                                                <span className="text-sm text-gray-700 dark:text-gray-300">
+                                                    {feature}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                <button
+                                    className={`w-full py-2.5 px-5 rounded-md font-medium text-sm transition-all duration-300 bg-gradient-to-r ${offer.color} text-white hover:opacity-90`}
+                                >
+                                    Apply Now
+                                </button>
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
+
                 {/* Mobile Horizontal Scroll (shows on screens < 1024px) */}
                 <div className="lg:hidden overflow-x-auto pb-6 -mx-4 px-4">
                     <div className="flex space-x-6 w-max min-h-[400px]">
@@ -142,69 +205,6 @@ const LoanAndOffer = () => {
                             </motion.div>
                         ))}
                     </div>
-                </div>
-
-                {/* Desktop Grid (shows on screens ≥ 1024px) */}
-                <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {loanOffers.map((offer) => (
-                        <motion.div
-                            key={offer.id}
-                            className={`${offer.bgColor} dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col`}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5 }}
-                            whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
-                        >
-                            {/* Gradient header */}
-                            <div className={`h-2 bg-gradient-to-r ${offer.color}`}></div>
-
-                            {/* Card content */}
-                            <div className="p-6 flex flex-col h-full">
-                                <div className="flex-1">
-                                    <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-3">
-                                        {offer.title}
-                                    </h3>
-                                    <div className="mb-5">
-                                        <p className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                                            Interest Rate
-                                        </p>
-                                        <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                                            {offer.rate}
-                                        </p>
-                                    </div>
-                                    <ul className="space-y-3 mb-6">
-                                        {offer.features.map((feature, i) => (
-                                            <li key={i} className="flex items-start">
-                                                <div className={`p-1 rounded-full mr-3 bg-white dark:bg-gray-700`}>
-                                                    <svg
-                                                        className={`h-4 w-4 ${offer.iconColor} dark:text-white`}
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke="currentColor"
-                                                    >
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth={2}
-                                                            d="M5 13l4 4L19 7"
-                                                        />
-                                                    </svg>
-                                                </div>
-                                                <span className="text-sm text-gray-700 dark:text-gray-300">
-                                                    {feature}
-                                                </span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                                <button
-                                    className={`w-full py-2.5 px-5 rounded-md font-medium text-sm transition-all duration-300 bg-gradient-to-r ${offer.color} text-white hover:opacity-90`}
-                                >
-                                    Apply Now
-                                </button>
-                            </div>
-                        </motion.div>
-                    ))}
                 </div>
             </div>
         </section>

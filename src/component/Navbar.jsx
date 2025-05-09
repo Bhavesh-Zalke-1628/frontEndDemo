@@ -49,10 +49,7 @@ const Loader = ({ setLoading }) => {
             animate="visible"
             exit="exit"
         >
-            <motion.div
-                variants={itemVariants}
-                className="mb-8 text-center"
-            >
+            <motion.div variants={itemVariants} className="mb-8 text-center">
                 <motion.div
                     animate={{
                         rotate: [0, 5, -5, 0],
@@ -65,12 +62,9 @@ const Loader = ({ setLoading }) => {
                     }}
                     className="text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-300 bg-clip-text text-transparent"
                 >
-                    Welcome to hously
+                    Welcome to Hously
                 </motion.div>
-                <motion.p
-                    className="text-purple-200 text-lg"
-                    variants={itemVariants}
-                >
+                <motion.p className="text-purple-200 text-lg" variants={itemVariants}>
                     Loading your experience...
                 </motion.p>
             </motion.div>
@@ -87,18 +81,12 @@ const Loader = ({ setLoading }) => {
                 />
             </motion.div>
 
-            <motion.p
-                className="text-pink-300 font-mono text-sm"
-                variants={itemVariants}
-            >
+            <motion.p className="text-pink-300 font-mono text-sm" variants={itemVariants}>
                 {progress}% COMPLETE
             </motion.p>
 
-            <motion.div
-                className="absolute bottom-10 text-purple-200 text-xs"
-                variants={itemVariants}
-            >
-                Powered Hously pvt.ltd.
+            <motion.div className="absolute bottom-10 text-purple-200 text-xs" variants={itemVariants}>
+                Powered by Hously Pvt. Ltd.
             </motion.div>
         </motion.div>
     );
@@ -118,17 +106,12 @@ function Navbar() {
                 setShowDropdown(false);
             }
         };
-
         document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
+        return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
     useEffect(() => {
-        const checkMobile = () => {
-            setIsMobile(window.innerWidth < 768);
-        };
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
         checkMobile();
         window.addEventListener('resize', checkMobile);
         return () => window.removeEventListener('resize', checkMobile);
@@ -142,18 +125,10 @@ function Navbar() {
         { name: 'More', color: 'from-purple-700 to-pink-700' }
     ];
 
-    const handleMoreClick = () => {
-        setShowDropdown(!showDropdown);
-    };
-
+    const handleMoreClick = () => setShowDropdown(!showDropdown);
     const handleAuthAction = (action) => {
-        if (action === 'login') {
-            setIsLoggedIn(true);
-        } else if (action === 'signup') {
-            // Handle signup
-        } else if (action === 'logout') {
-            setIsLoggedIn(false);
-        }
+        if (action === 'login') setIsLoggedIn(true);
+        else if (action === 'logout') setIsLoggedIn(false);
         setShowDropdown(false);
     };
 
@@ -164,14 +139,10 @@ function Navbar() {
             initial={{ y: isMobile ? 100 : -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, type: 'spring', stiffness: 100 }}
-            className={`fixed ${isMobile ? 'bottom-4' : 'top-10'} left-0 right-0 mx-auto flex items-center justify-between w-[90%] md:w-[80%] max-w-5xl h-16 md:h-20 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-lg z-50 px-4 md:px-8`}
-            style={{ background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%)' }}
+            className={`fixed ${isMobile ? 'bottom-4' : 'top-10'} left-0 right-0 mx-auto flex items-center justify-between w-[90%] md:w-[80%] max-w-[75vw] h-16 md:h-20 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-lg z-50 px-4 md:px-8`}
+            style={{ background: 'linear-gradient(135deg, rgba(76,29,149,0.4) 0%, rgba(190,24,93,0.4) 100%)' }}
         >
-            {!isMobile && (
-                <motion.div>
-                    <img src={logo} className='w-36 md:w-48' alt="" />
-                </motion.div>
-            )}
+            {!isMobile && <img src={logo} className='w-36 md:w-48' alt="Logo" />}
 
             <nav>
                 <ul className='flex justify-center gap-4 md:gap-8'>
@@ -180,11 +151,12 @@ function Navbar() {
                             key={item.name}
                             onMouseEnter={() => !isMobile && setHoveredItem(item.name)}
                             onMouseLeave={() => !isMobile && setHoveredItem(null)}
-                            className="relative px-1 md:px-2 py-1 text-black"
+                            className="relative px-1 md:px-2 py-1 text-white"
                             ref={item.name === 'More' ? dropdownRef : null}
                         >
                             <motion.div
-                                className={` hover:text-gray-300 transition-colors font-medium cursor-pointer text-sm md:text-base ${!isMobile && hoveredItem === item.name ? 'text-pink-300' : ''}`}
+                                className={`font-medium cursor-pointer text-sm md:text-base transition-colors ${!isMobile && hoveredItem === item.name ? 'text-pink-300' : 'text-white'
+                                    }`}
                                 whileHover={{ scale: !isMobile ? 1.05 : 1 }}
                                 onClick={item.name === 'More' ? handleMoreClick : undefined}
                             >
@@ -259,9 +231,7 @@ function Navbar() {
                         background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)'
                     }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-4 md:px-6 py-1 md:py-2 rounded-full bg-gradient-to-r from-blue-500 to-yellow-400 text-white font-medium shadow-lg hover:shadow-xl transition-all text-sm md:text-base"
-                    style={{ boxShadow: '0 4px 15px rgba(168, 85, 247, 0.4)' }}
-                    onClick={isLoggedIn ? () => handleAuthAction('profile') : () => handleAuthAction('login')}
+                    className="px-4 md:px-6 py-1 md:py-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium shadow-lg hover:shadow-xl transition-all text-sm md:text-base"
                 >
                     {isLoggedIn ? 'Profile' : 'Get Started'}
                 </motion.button>

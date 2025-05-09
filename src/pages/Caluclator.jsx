@@ -62,7 +62,7 @@ function Calculator() {
         setIsCalculating(true);
         setTimeout(() => {
             const numericValues = inputValues.map(val => parseFloat(val) || 0);
-            const r = numericValues[1] / 100;
+            numericValues[1] = numericValues[1] / 100; // Convert rate from % to decimal
             const result = selectedCalc.formula(...numericValues);
             setResult(result);
             setIsCalculating(false);
@@ -102,7 +102,7 @@ function Calculator() {
                     </motion.p>
                 </div>
 
-                {/* Mobile View (calculator on top) */}
+                {/* Mobile View */}
                 <div className="lg:hidden">
                     <motion.div
                         initial={{ opacity: 0, x: 20 }}
@@ -168,7 +168,7 @@ function Calculator() {
                                     ₹{Number(result).toLocaleString()}
                                 </p>
                                 <p className="text-xs text-blue-500 mt-2">
-                                    {selectedCalc.title === "Loan EMI Calculator" || selectedCalc.title === "Mortgage Calculator"
+                                    {selectedCalc.title.includes("Loan") || selectedCalc.title.includes("Mortgage")
                                         ? "Monthly Payment"
                                         : "Total Amount"}
                                 </p>
@@ -176,7 +176,7 @@ function Calculator() {
                         )}
                     </motion.div>
 
-                    {/* Horizontal scroll for calculator options */}
+                    {/* Horizontal scrollable calculator list */}
                     <div className="overflow-x-auto pb-6 -mx-4 px-4">
                         <div className="flex space-x-6 w-max">
                             {calculators.map((calc) => (
@@ -184,7 +184,7 @@ function Calculator() {
                                     key={calc.id}
                                     whileHover={{ y: -5 }}
                                     whileTap={{ scale: 0.98 }}
-                                    className={`bg-white p-6 rounded-xl shadow-md cursor-pointer transition-all duration-300 border-2 w-64 flex-shrink-0 ${selectedCalc.id === calc.id ? 'border-blue-500' : 'border-transparent hover:border-blue-200'}`}
+                                    className={`bg-white p-6 rounded-xl shadow-md cursor-pointer transition-all duration-300 border-2 w-96 flex-shrink-0 ${selectedCalc.id === calc.id ? 'border-blue-500' : 'border-transparent hover:border-blue-200'}`}
                                     onClick={() => {
                                         setSelectedCalc(calc);
                                         setInputValues(["", "", ""]);
@@ -201,41 +201,36 @@ function Calculator() {
                 </div>
 
                 {/* Desktop View */}
-                <div className="hidden lg:grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div className="md:col-span-2">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {calculators.map((calc) => (
-                                <motion.div
-                                    key={calc.id}
-                                    whileHover={{ y: -5 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    className={`bg-white p-6 rounded-xl shadow-md cursor-pointer transition-all duration-300 border-2 ${selectedCalc.id === calc.id ? 'border-blue-500' : 'border-transparent hover:border-blue-200'}`}
-                                    onClick={() => {
-                                        setSelectedCalc(calc);
-                                        setInputValues(["", "", ""]);
-                                        setResult(null);
-                                    }}
-                                >
-                                    <div className="text-3xl mb-3">{calc.icon}</div>
-                                    <h3 className="text-xl font-semibold text-gray-800 mb-2">{calc.title}</h3>
-                                    <p className="text-gray-600 text-sm">{calc.description}</p>
-                                </motion.div>
-                            ))}
-                        </div>
+                <div className="hidden lg:grid grid-cols-3 gap-8 mt-12">
+                    {/* Calculator Options */}
+                    <div className="col-span-1 space-y-4">
+                        {calculators.map((calc) => (
+                            <motion.div
+                                key={calc.id}
+                                whileHover={{ y: -5 }}
+                                whileTap={{ scale: 0.98 }}
+                                className={`bg-white p-6 rounded-xl shadow-md cursor-pointer transition-all duration-300 border-2 ${selectedCalc.id === calc.id ? 'border-blue-500' : 'border-transparent hover:border-blue-200'}`}
+                                onClick={() => {
+                                    setSelectedCalc(calc);
+                                    setInputValues(["", "", ""]);
+                                    setResult(null);
+                                }}
+                            >
+                                <div className="text-3xl mb-3">{calc.icon}</div>
+                                <h3 className="text-xl font-semibold text-gray-800 mb-2">{calc.title}</h3>
+                                <p className="text-gray-600 text-sm">{calc.description}</p>
+                            </motion.div>
+                        ))}
                     </div>
 
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.6 }}
-                        className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100"
-                    >
+                    {/* Calculator Form & Result */}
+                    <div className="col-span-2 bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
                         <div className="flex items-center mb-6">
                             <div className="text-3xl mr-4">{selectedCalc.icon}</div>
                             <h3 className="text-2xl font-bold text-gray-800">{selectedCalc.title}</h3>
                         </div>
 
-                        <div className="space-y-5 mb-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                             {selectedCalc.inputs.map((input, index) => (
                                 <div key={index}>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -264,17 +259,7 @@ function Calculator() {
                             disabled={isCalculating}
                             className={`w-full py-3 px-6 rounded-lg font-medium text-white transition-all ${isCalculating ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'}`}
                         >
-                            {isCalculating ? (
-                                <span className="flex items-center justify-center">
-                                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                    Calculating...
-                                </span>
-                            ) : (
-                                "Calculate"
-                            )}
+                            {isCalculating ? "Calculating..." : "Calculate"}
                         </motion.button>
 
                         {result !== null && (
@@ -288,16 +273,14 @@ function Calculator() {
                                     ₹{Number(result).toLocaleString()}
                                 </p>
                                 <p className="text-xs text-blue-500 mt-2">
-                                    {selectedCalc.title === "Loan EMI Calculator" || selectedCalc.title === "Mortgage Calculator"
+                                    {selectedCalc.title.includes("Loan") || selectedCalc.title.includes("Mortgage")
                                         ? "Monthly Payment"
                                         : "Total Amount"}
                                 </p>
                             </motion.div>
                         )}
-                    </motion.div>
+                    </div>
                 </div>
-
-               
             </motion.div>
         </div>
     );
